@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bou.ke/monkey"
 	"testing"
 	"time"
 
@@ -118,6 +119,8 @@ func TestParseStart(t *testing.T) {
 
 func TestParseOptions(t *testing.T) {
 	a := assert.New(t)
+
+	monkey.Patch(time.Now, func() time.Time { return stopped })
 
 	option := ParseOptions()
 	a.Equal(defaultOptions(), option, "without flags, option should be default one")
