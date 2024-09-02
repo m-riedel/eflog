@@ -103,6 +103,19 @@ func TestParseSplitBy(t *testing.T) {
 	a.Error(err, "there should be an error when negative is given")
 }
 
+func TestParseStart(t *testing.T) {
+	a := assert.New(t)
+	start, err := ParseStart("2024-09-02 11:38:23.529313")
+	a.NoError(err, "there should be no error")
+	a.Equal(2024, start.Year(), "Year should be 2024")
+	a.Equal(9, int(start.Month()), "Month should be 9")
+	a.Equal(2, start.Day(), "Day should be 2")
+	a.Equal(11, start.Hour(), "Hour should be 11")
+	a.Equal(38, start.Minute(), "Minute should be 38")
+	a.Equal(23, start.Second(), "Second should be 23")
+	a.Equal(529313000, start.Nanosecond(), "Nanosecond should be 529313000")
+}
+
 func TestParseOptions(t *testing.T) {
 	a := assert.New(t)
 
