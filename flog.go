@@ -15,7 +15,7 @@ import (
 func Generate(option *Option) error {
 	var (
 		splitCount = 1
-		created    = time.Now()
+		created    = option.Start
 
 		interval time.Duration
 		delay    time.Duration

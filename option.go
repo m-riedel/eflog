@@ -43,6 +43,7 @@ Options:
                            with "byte" option, the logs will be split whenever the maximum size in bytes is reached.
   -w, --overwrite          overwrite the existing log files.
   -l, --loop               loop output forever until killed.
+  -e, --start string       start time for the logs (default: now). Should be in '2006-01-02 15:04:05.000000' format.
 `
 
 var validFormats = []string{"apache_common", "apache_combined", "apache_error", "rfc3164", "rfc5424", "common_log", "json"}
@@ -60,6 +61,7 @@ type Option struct {
 	SplitBy   int
 	Overwrite bool
 	Forever   bool
+	Start     time.Time
 }
 
 func init() {
@@ -91,6 +93,7 @@ func defaultOptions() *Option {
 		SplitBy:   0,
 		Overwrite: false,
 		Forever:   false,
+		Start:     time.Now(),
 	}
 }
 
@@ -164,6 +167,14 @@ func ParseSplitBy(splitBy int) (int, error) {
 	return splitBy, nil
 }
 
+func ParseStart(start string) (time.Time, error) {
+	if start == "" {
+		return time.Now(), nil
+	}
+	t, err := time.Parse("2006-01-02 15:04:05.000000", start)
+	return t, err
+}
+
 // ParseOptions parses given parameters from command line
 func ParseOptions() *Option {
 	var err error
@@ -182,6 +193,7 @@ func ParseOptions() *Option {
 	splitBy := pflag.IntP("split", "p", opts.SplitBy, "Maximum number of lines or size of a log file")
 	overwrite := pflag.BoolP("overwrite", "w", false, "Overwrite the existing log files")
 	forever := pflag.BoolP("loop", "l", false, "Loop output forever until killed")
+	start := pflag.StringP("start", "e", "", "Start time for the logs (default: now). Should be in '2006-01-02 15:04:05.000000' format.")
 
 	pflag.Parse()
 
@@ -212,6 +224,9 @@ func ParseOptions() *Option {
 		errorExit(err)
 	}
 	if opts.SplitBy, err = ParseSplitBy(*splitBy); err != nil {
+		errorExit(err)
+	}
+	if opts.Start, err = ParseStart(*start); err != nil {
 		errorExit(err)
 	}
 	opts.Output = *output
