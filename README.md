@@ -1,36 +1,19 @@
 # Flog
 
-[![go report card](https://goreportcard.com/badge/github.com/mingrammer/flog)](https://goreportcard.com/report/github.com/mingrammer/flog) [![travis ci](https://travis-ci.com/mingrammer/flog.svg?branch=master)](https://travis-ci.com/mingrammer/flog) [![docker download](https://img.shields.io/docker/pulls/mingrammer/flog.svg)](https://hub.docker.com/r/mingrammer/flog)
+[![go report card](https://goreportcard.com/badge/github.com/m-riedel/eflog)](https://goreportcard.com/report/github.com/mingrammer/flog)
 
-flog is a fake log generator for common log formats such as apache-common, apache error and RFC3164 syslog.
+eflog is a fake log generator for common log formats such as apache-common, apache error and RFC3164 syslog.
 
 It is useful for testing some tasks which require log data like amazon kinesis log stream test.
 
-> Thanks to [gofakeit](https://github.com/brianvoe/gofakeit) 😘
+It is a fork of [flog](https://github.com/mingrammer/flog) with some additional features and options.
 
-## Installation
+> Thanks to [gofakeit](https://github.com/brianvoe/gofakeit) and [flog](https://github.com/mingrammer/flog) 
 
-### Using go install
-
-```bash
-go install github.com/mingrammer/flog
-```
-
-### Using [homebrew](https://brew.sh)
+## Installation Using [docker](https://www.docker.com)
 
 ```
-brew tap mingrammer/flog
-brew install flog
-```
-
-### Using .tar.gz archive
-
-Download gzip file from [Github Releases](https://github.com/mingrammer/flog/releases/latest) according to your OS. Then, copy the unzipped executable to under system path.
-
-### Using [docker](https://www.docker.com)
-
-```
-docker run -it --rm mingrammer/flog
+docker run -it --rm ghcr.io/m-riedel/eflog
 ```
 
 ## Usage
@@ -65,6 +48,7 @@ Options:
   -l, --loop               loop output forever until killed.
   -e, --start              start time for the logs (default: now). 
                            Should be in '2006-01-02 15:04:05.000000' format.
+  -r, --seed integer       seed for random generator.
 ```
 
 ```console

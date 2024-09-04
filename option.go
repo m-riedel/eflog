@@ -44,6 +44,7 @@ Options:
   -w, --overwrite          overwrite the existing log files.
   -l, --loop               loop output forever until killed.
   -e, --start string       start time for the logs (default: now). Should be in '2006-01-02 15:04:05.000000' format.
+  -r, --seed integer       seed for random generator.
 `
 
 var validFormats = []string{"apache_common", "apache_combined", "apache_error", "rfc3164", "rfc5424", "common_log", "json"}
@@ -62,6 +63,7 @@ type Option struct {
 	Overwrite bool
 	Forever   bool
 	Start     time.Time
+	Seed      int64
 }
 
 func init() {
@@ -94,6 +96,7 @@ func defaultOptions() *Option {
 		Overwrite: false,
 		Forever:   false,
 		Start:     time.Now(),
+		Seed:      0,
 	}
 }
 
@@ -175,6 +178,10 @@ func ParseStart(start string) (time.Time, error) {
 	return t, err
 }
 
+func ParseSeed(seed int64) (int64, error) {
+	return seed, nil
+}
+
 // ParseOptions parses given parameters from command line
 func ParseOptions() *Option {
 	var err error
@@ -194,6 +201,7 @@ func ParseOptions() *Option {
 	overwrite := pflag.BoolP("overwrite", "w", false, "Overwrite the existing log files")
 	forever := pflag.BoolP("loop", "l", false, "Loop output forever until killed")
 	start := pflag.StringP("start", "e", "", "Start time for the logs (default: now). Should be in '2006-01-02 15:04:05.000000' format.")
+	seed := pflag.Int64P("seed", "r", opts.Seed, "Seed for random generator")
 
 	pflag.Parse()
 
@@ -229,8 +237,12 @@ func ParseOptions() *Option {
 	if opts.Start, err = ParseStart(*start); err != nil {
 		errorExit(err)
 	}
+	if opts.Seed, err = ParseSeed(*seed); err != nil {
+		errorExit(err)
+	}
 	opts.Output = *output
 	opts.Overwrite = *overwrite
 	opts.Forever = *forever
+
 	return opts
 }
