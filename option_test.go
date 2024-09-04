@@ -117,6 +117,14 @@ func TestParseStart(t *testing.T) {
 	a.Equal(529313000, start.Nanosecond(), "Nanosecond should be 529313000")
 }
 
+func TestParseSeed(t *testing.T) {
+	a := assert.New(t)
+
+	seed, err := ParseSeed(100)
+	a.Equal(int64(100), seed, "seed should be 100")
+	a.NoError(err, "there should be no error")
+}
+
 func TestParseOptions(t *testing.T) {
 	a := assert.New(t)
 
